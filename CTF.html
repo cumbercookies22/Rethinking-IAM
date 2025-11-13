@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Capture The Flag (CTF)</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+            background-color: #9ca5a8;
+            background-image: url('c:/Users/hampi.thumati/Downloads/Gemini_Generated_Image_jrgjpkjrgjpkjrgj.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+            background-attachment: fixed;
+        }
+
+        .nav-menu {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 40px;
+        }
+
+        .nav-menu ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .nav-menu a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+
+        .nav-menu a:hover {
+            color: #FFD700;
+        }
+
+        .content {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 10;
+        }
+
+        .castle-scene {
+            position: relative;
+            height: 600px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            margin: 50px 0;
+        }
+
+        /* Diary */
+        .diary {
+            position: absolute;
+            right: 15%;
+            bottom: 0;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .diary:hover {
+            transform: scale(1.05) rotate(2deg);
+        }
+
+        .diary-cover {
+            width: 80px;
+            height: 120px;
+            background: linear-gradient(135deg, #8b4513, #a0522d);
+            border: 3px solid #654321;
+            border-radius: 5px;
+            position: relative;
+            box-shadow: 5px 5px 15px rgba(0,0,0,0.4);
+        }
+
+        .diary-cover::before {
+            content: 'DIARY';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #ffd700;
+            font-weight: bold;
+            font-size: 14px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+        }
+
+        .diary-spine {
+            position: absolute;
+            left: -5px;
+            top: 5px;
+            width: 5px;
+            height: 110px;
+            background: #654321;
+            border-radius: 3px 0 0 3px;
+        }
+
+        .diary-label {
+            text-align: center;
+            color: white;
+            margin-top: 10px;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 40px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 600px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            animation: slideIn 0.3s;
+        }
+
+        .diary-content {
+            background: linear-gradient(135deg, #f5e6d3 0%, #e8d4b8 100%);
+            border: 3px solid #8b4513;
+            position: relative;
+            min-height: 500px;
+        }
+
+        .diary-content::before {
+            content: '';
+            position: absolute;
+            left: 30px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: #d4a574;
+            opacity: 0.5;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-header {
+            color: #667eea;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .modal-body {
+            color: #333;
+            line-height: 1.8;
+            font-size: 1.1em;
+            margin-bottom: 20px;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .close:hover {
+            color: #000;
+        }
+
+        .modal-footer {
+            text-align: right;
+        }
+
+        .btn {
+            background: #667eea;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background 0.3s;
+        }
+
+        .btn:hover {
+            background: #764ba2;
+        }
+
+        /* Cloud styling */
+        .cloud {
+            width: 100px;
+            height: 40px;
+            background: white;
+            border-radius: 20px;
+            position: fixed;
+            opacity: 0.8;
+            animation: float 20s infinite linear;
+            z-index: 5;
+        }
+
+        .cloud:before, .cloud:after {
+            content: '';
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+        }
+
+        .cloud:before {
+            width: 50px;
+            height: 50px;
+            top: -20px;
+            left: 15px;
+        }
+
+        .cloud:after {
+            width: 30px;
+            height: 30px;
+            top: -10px;
+            right: 15px;
+        }
+
+        @keyframes float {
+            from { transform: translateX(-200px); }
+            to { transform: translateX(calc(100vw + 200px)); }
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav-menu">
+        <ul>
+            <li><a href="IAM.html">IAM</a></li>
+            <li><a href="philosophy.html">Philosophy</a></li>
+            <li><a href="protocols.html">Protocols</a></li>
+            <li><a href="CTF.html">CTF</a></li>
+        </ul>
+    </nav>
+
+    <div class="content">
+        <div class="castle-scene">
+        
+            <!-- Diary -->
+            <div class="diary" onclick="openDiary()">
+                <div class="diary-spine"></div>
+                <div class="diary-cover"></div>
+                <div class="diary-label">Click Diary</div>
+           
+    </div>
+
+    <!-- Diary Modal -->
+    <div id="diary-modal" class="modal">
+        <div class="modal-content diary-content">
+            <span class="close" onclick="closeDiary()">&times;</span>
+            <div id="diary-page"></div>
+        </div>
+    </div>
+
+    <!-- Modal 1: Traveler's Story (SAML Assertion) -->
+    <div id="modal1" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('modal1')">&times;</span>
+            <div class="modal-header">🚶 The Traveler's Tale</div>
+            <div class="modal-body">
+                <p><strong>Riddle:</strong></p>
+                <p>"There's a little inspector in the traveler's luggage — a glass that shows what the messenger hands to the gate. If only you could catch that paper before it's eaten by the gate."</p>
+                <p style="margin-top: 20px;"><strong>Hint:</strong> Use SAML Tracer to examine the assertion. Look at what gets sent to the authentication gate.</p>
+                <p style="margin-top: 10px;"><strong>Question:</strong> What is being transmitted in the SAML Assertion?</p>
+                <p style="margin-top: 10px; color: #667eea; font-weight: bold;">Answer: The Assertion itself contains user information and attributes</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" onclick="closeModal('modal1')">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal 2: Dog's Wisdom (Signature/Certificate) -->
+    <div id="modal2" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('modal2')">&times;</span>
+            <div class="modal-header">🐕 The Faithful Hound's Secret</div>
+            <div class="modal-body">
+                <p><strong>Riddle:</strong></p>
+                <p>"We kept the gate locked for the unworthy. The key is written by the one who signs our name, yet sometimes the ink is only decoration. Look at what the traveler carries in their pockets — a single word that describes them."</p>
+                <p style="margin-top: 20px;"><strong>Hint:</strong> Examine the assertion for something that validates authenticity. It's signed and carries proof of identity.</p>
+                <p style="margin-top: 10px;"><strong>Question:</strong> Which attribute in the assertion needs to be examined for verification?</p>
+                <p style="margin-top: 10px; color: #667eea; font-weight: bold;">Answer: The Signature or Certificate attribute that signs the assertion</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" onclick="closeModal('modal2')">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal 3: Diary's Secret (Role Attribute) -->
+    <div id="modal3" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('modal3')">&times;</span>
+            <div class="modal-header">📖 The Diary's Hidden Page</div>
+            <div class="modal-body">
+                <p><strong>Riddle:</strong></p>
+                <p>"Mama used to call users by their title, not their faces. 'role' used to decide who climbed the tower. If you could change the title, perhaps the guards would bow."</p>
+                <p style="margin-top: 20px;"><strong>Hint:</strong> Look for the attribute that determines access levels and permissions.</p>
+                <p style="margin-top: 10px;"><strong>Question:</strong> Which attribute in the assertion needs to be changed to gain elevated access?</p>
+                <p style="margin-top: 10px; color: #667eea; font-weight: bold;">Answer: The 'role' attribute — changing it can grant access to restricted resources</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" onclick="closeModal('modal3')">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Clouds -->
+    <div class="cloud" style="top: 50px; animation-duration: 30s;"></div>
+    <div class="cloud" style="top: 100px; left: 200px; animation-duration: 25s;"></div>
+    <div class="cloud" style="top: 150px; left: 400px; animation-duration: 35s;"></div>
+    <div class="cloud" style="top: 75px; left: 300px; animation-duration: 28s;"></div>
+    <div class="cloud" style="top: 200px; left: 150px; animation-duration: 32s;"></div>
+
+    <script>
+        let diaryPage = 0;
+        let riddleIndex = 0;
+        const riddles = ['modal1', 'modal2', 'modal3'];
+
+        const diaryContent = {
+            intro: `
+                <div style="padding: 30px; text-align: center;">
+                    <h2 style="color: #8b4513; font-size: 2em; margin-bottom: 20px;">📖 The Traveler's Diary</h2>
+                    <p style="color: #333; font-size: 1.1em; line-height: 1.8;">
+                        Welcome to a journey through ancient mysteries. Within these pages lie three riddles, 
+                        each guarding a secret about authentication and access control.
+                    </p>
+                    <p style="color: #333; font-size: 1.1em; line-height: 1.8; margin-top: 20px;">
+                        Click "Next Page" to begin your adventure...
+                    </p>
+                    <button class="btn" onclick="nextDiaryPage()" style="margin-top: 30px;">Next Page →</button>
+                </div>
+            `,
+            riddle1: `
+                <div style="padding: 30px;">
+                    <h3 style="color: #8b4513; margin-bottom: 20px;">🔍 Page 1: The Messenger's Message</h3>
+                    <p style="color: #333; font-style: italic; margin-bottom: 15px;">
+                        <strong>"There's a little inspector in the traveler's luggage — a glass that shows what the messenger hands to the gate. 
+                        If only you could catch that paper before it's eaten by the gate."</strong>
+                    </p>
+                    <p style="color: #555; margin: 15px 0;"><strong>Hint:</strong> Use SAML Tracer to examine the assertion. Look at what gets sent to the authentication gate.</p>
+                    <p style="color: #555; margin: 15px 0;"><strong>Question:</strong> What is being transmitted in the SAML Assertion?</p>
+                    <p style="color: #667eea; font-weight: bold; margin-top: 20px;">Answer: The Assertion itself contains user information and attributes</p>
+                    <div style="margin-top: 30px; text-align: right;">
+                        <button class="btn" onclick="nextDiaryPage()">Next Page →</button>
+                    </div>
+                </div>
+            `,
+            riddle2: `
+                <div style="padding: 30px;">
+                    <h3 style="color: #8b4513; margin-bottom: 20px;">🔐 Page 2: The Sealed Pockets</h3>
+                    <p style="color: #333; font-style: italic; margin-bottom: 15px;">
+                        <strong>"We kept the gate locked for the unworthy. The key is written by the one who signs our name, 
+                        yet sometimes the ink is only decoration. Look at what the traveler carries in their pockets — a single word that describes them."</strong>
+                    </p>
+                    <p style="color: #555; margin: 15px 0;"><strong>Hint:</strong> Examine the assertion for something that validates authenticity. It's signed and carries proof of identity.</p>
+                    <p style="color: #555; margin: 15px 0;"><strong>Question:</strong> Which attribute in the assertion needs to be examined for verification?</p>
+                    <p style="color: #667eea; font-weight: bold; margin-top: 20px;">Answer: The Signature or Certificate attribute that signs the assertion</p>
+                    <div style="margin-top: 30px; text-align: right;">
+                        <button class="btn" onclick="nextDiaryPage()">Next Page →</button>
+                    </div>
+                </div>
+            `,
+            riddle3: `
+                <div style="padding: 30px;">
+                    <h3 style="color: #8b4513; margin-bottom: 20px;">👑 Page 3: The Hidden Page</h3>
+                    <p style="color: #333; font-style: italic; margin-bottom: 15px;">
+                        <strong>"Mama used to call users by their title, not their faces. 'role' used to decide who climbed the tower. 
+                        If you could change the title, perhaps the guards would bow."</strong>
+                    </p>
+                    <p style="color: #555; margin: 15px 0;"><strong>Hint:</strong> Look for the attribute that determines access levels and permissions.</p>
+                    <p style="color: #555; margin: 15px 0;"><strong>Question:</strong> Which attribute in the assertion needs to be changed to gain elevated access?</p>
+                    <p style="color: #667eea; font-weight: bold; margin-top: 20px;">Answer: The 'role' attribute — changing it can grant access to restricted resources</p>
+                    <div style="margin-top: 30px; text-align: right;">
+                        <button class="btn" onclick="closeDiary()">Close Diary</button>
+                    </div>
+                </div>
+            `
+        };
+
+        function openDiary() {
+            diaryPage = 0;
+            document.getElementById('diary-modal').style.display = 'block';
+            displayDiaryPage();
+        }
+
+        function closeDiary() {
+            document.getElementById('diary-modal').style.display = 'none';
+            diaryPage = 0;
+        }
+
+        function nextDiaryPage() {
+            diaryPage++;
+            if (diaryPage > 3) {
+                closeDiary();
+            } else {
+                displayDiaryPage();
+            }
+        }
+
+        function displayDiaryPage() {
+            const pages = ['intro', 'riddle1', 'riddle2', 'riddle3'];
+            document.getElementById('diary-page').innerHTML = diaryContent[pages[diaryPage]];
+        }
+
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = 'block';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        // Close modal when clicking outside of it
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>
