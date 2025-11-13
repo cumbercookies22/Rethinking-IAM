@@ -278,7 +278,7 @@
     <div class="content">
         <div class="castle-scene">
             <!-- Castle Gate Link -->
-            <a id="gate-link" href="http://10.0.0.192:3000/saml" class="gate-link" target="_self" rel="noopener">
+            <a id="gate-link" href="http://10.0.0.192:3000/saml/login" class="gate-link" target="_self" rel="noopener">
                 <div class="gate-button">Click Here</div>
             </a>
         
@@ -364,7 +364,7 @@
         // Configure gate link to start SAML login and return to OIDC.html after auth
         (function configureGateLink() {
             try {
-                const idpBase = 'http://10.0.0.192:3000/saml'; // SAML IdP entry
+                const idpBase = 'http://10.0.0.192:3000/saml/login'; // SAML IdP entry
                 const link = document.getElementById('gate-link');
                 if (!link) return;
 
