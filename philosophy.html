@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Philosophy</title>
+  <style>
+  html,body { height:100%; }
+  body { font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif; margin: 0; color: #222; }
+  .page { position: relative; z-index: 2; padding: 2rem; }
+  /* header/nav */
+  header.site-header { margin-bottom: 1rem; }
+  header.site-header nav a { margin-right: 1.25rem; color: #0b486b; text-decoration: none; font-weight: 500; }
+  header.site-header nav a:hover { text-decoration: underline; }
+    h1 { color: #0b486b; margin: 0 0 .5rem 0; }
+    .lead { max-width: 60ch; margin: 0 0 1rem 0; }
+
+  /* Full-page garden (background) */
+  .garden { position: fixed; inset: 0; z-index: 0; background: linear-gradient(#87CEEB 0%, #cfe9ff 62%, #79d087 62%, #2f7a3a 100%); overflow: hidden; }
+    /* blades container covers full viewport */
+    .blades { position: absolute; left: 0; top: 0; width: 100%; height: 100%; pointer-events: none; }
+
+  /* brighter, denser grass blades */
+  .blade { position: absolute; bottom: 0; width:6px; background: linear-gradient(180deg, #7ef07c 0%, #19863a 100%); box-shadow: 0 3px 6px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.08); border-radius: 6px 6px 0 0; transform-origin: bottom center; animation: sway 3s ease-in-out infinite; pointer-events: auto; filter: saturate(1.2) contrast(1.03); }
+  .blade.small { opacity: .98; filter: saturate(1.25) contrast(1.05); }
+    .blade.tall { transform: none; }
+
+    @keyframes sway {
+      0% { transform: rotate(-4deg); }
+      50% { transform: rotate(4deg); }
+      100% { transform: rotate(-4deg); }
+    }
+
+    /* Rain drops */
+    .raindrop { position:absolute; top:-30px; width:3px; height:12px; background: rgba(173,216,230,0.95); border-radius:2px; opacity:0.95; animation: fall 700ms linear forwards; pointer-events: none; }
+    @keyframes fall { to { transform: translateY(110vh); opacity: 0.6; } }
+
+    /* Wet effect: when wet, blades grow taller */
+    .garden.wet .blade { transition: height .6s ease, transform .6s ease; }
+
+  /* ensure content sits above the garden */
+  /* slightly more transparent so greens show through better */
+  .page { position: relative; z-index: 2; background: rgba(255,255,255,0.82); min-height:100vh; }
+
+    /* small responsive */
+    @media (max-width:520px) { .lead { padding-right: .5rem; } }
+  </style>
+</head>
+<body>
+
+  <div class="page">
+    <header class="site-header">
+      <nav>
+        <a href="IAM.html">Home</a>
+        <a href="philosophy.html">Philosophy</a>
+        <a href="protocols.html">IAM principles</a>
+        <a href="CTF.html">Capture the Flags</a>
+      </nav>
+    </header>
+    <h1>Today's Philosophy</h1>
+    <p class="lead">Exploring the foundational beliefs and values that shape our approach Life
+
+  </div>
+
+  <div class="garden" id="garden" title="Move the mouse or touch to make it rain and grow the grass">
+    <div class="blades" id="blades">
+      <!-- blades injected by JS for easier control -->
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      const garden = document.getElementById('garden');
+      const blades = document.getElementById('blades');
+
+      // create blades scattered across the viewport in clusters for a bushy lawn
+      const COUNT = 600;
+      const CLUSTER_CHANCE = 0.32;
+      for (let i=0;i<COUNT;i++){
+        const cluster = Math.random() < CLUSTER_CHANCE;
+        if (cluster) {
+          const center = Math.random()*100;
+          const clusterSize = 3 + Math.floor(Math.random()*5);
+          for (let c=0;c<clusterSize;c++){
+            const b = document.createElement('div');
+            b.className = 'blade';
+            const h = 18 + Math.random()*120;
+            b.style.height = h + 'px';
+            b.style.width = (2 + Math.random()*8) + 'px';
+            b.style.left = Math.max(0, Math.min(100, center + (Math.random()*6 - 3))) + '%';
+            b.style.bottom = (Math.random()*80) + '%';
+            b.style.animationDuration = (1.4 + Math.random()*2.8) + 's';
+            b.style.transform = 'rotate(' + (Math.random()*20 -10) + 'deg)';
+            // greener, more saturated blades
+            b.style.background = 'linear-gradient(hsl(' + (95 + Math.random()*18) + ', ' + (62 + Math.random()*18) + '%, ' + (28 + Math.random()*8) + '%), hsl(' + (100 + Math.random()*10) + ', ' + (48 + Math.random()*12) + '%, ' + (14 + Math.random()*6) + '%))';
+            blades.appendChild(b);
+          }
+        } else {
+          const b = document.createElement('div');
+          b.className = 'blade';
+          const h = 12 + Math.random()*90;
+          b.style.height = h + 'px';
+          b.style.width = (2 + Math.random()*6) + 'px';
+          b.style.left = (Math.random()*100) + '%';
+          b.style.bottom = (Math.random()*75) + '%';
+          b.style.animationDuration = (1.8 + Math.random()*2.6) + 's';
+          b.style.transform = 'rotate(' + (Math.random()*12 -6) + 'deg)';
+          b.style.background = 'linear-gradient(hsl(' + (98 + Math.random()*16) + ', ' + (60 + Math.random()*20) + '%, ' + (22 + Math.random()*8) + '%), hsl(' + (104 + Math.random()*12) + ', ' + (46 + Math.random()*12) + '%, ' + (12 + Math.random()*6) + '%))';
+          blades.appendChild(b);
+        }
+      }
+
+      let rainTimer = null;
+      let idleTimer = null;
+      let isRaining = false;
+      function spawnDrop(x){
+        const drop = document.createElement('div');
+        drop.className = 'raindrop';
+        drop.style.left = x + 'px';
+        garden.appendChild(drop);
+        setTimeout(()=> drop.remove(), 1200);
+      }
+
+      function startRain(){
+        if (isRaining) return;
+        isRaining = true;
+        garden.classList.add('wet');
+        // make a portion of blades taller with varied growth
+        document.querySelectorAll('.blade').forEach((b)=>{
+          if (Math.random() > 0.55) {
+            b.style.height = (parseFloat(b.style.height) * (1.25 + Math.random()*0.6)) + 'px';
+          }
+        });
+        // spawn drops across the garden
+        rainTimer = setInterval(()=>{
+          const rect = garden.getBoundingClientRect();
+          const x = Math.random() * rect.width;
+          spawnDrop(x);
+        }, 45);
+      }
+
+      function stopRain(){
+        isRaining = false;
+        garden.classList.remove('wet');
+        // reset height to original values
+        document.querySelectorAll('.blade').forEach(b=>{ b.style.height = b.getAttribute('data-original') || b.style.height; });
+        clearInterval(rainTimer);
+        rainTimer = null;
+      }
+
+      // preserve original heights so we can reset later
+      document.querySelectorAll('.blade').forEach(b=> b.setAttribute('data-original', b.style.height));
+
+      // Interaction: start rain on mouse movement over the viewport; stop after idle
+      function onPointerMove(e){
+        startRain();
+        if (idleTimer) clearTimeout(idleTimer);
+        idleTimer = setTimeout(()=>{ stopRain(); }, 1200);
+      }
+
+      window.addEventListener('mousemove', onPointerMove, {passive:true});
+      window.addEventListener('touchstart', onPointerMove, {passive:true});
+      window.addEventListener('touchend', function(){ if (idleTimer) clearTimeout(idleTimer); idleTimer = setTimeout(()=>{ stopRain(); }, 1200); }, {passive:true});
+    })();
+  </script>
+
+ 
+</body>
+</html>

@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Final Challenge</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            width: 100vw;
+            height: 100vh;
+            background: url('c:/Users/hampi.thumati/Downloads/Gemini_Generated_Image_f1fxdlf1fxdlf1fx.png') no-repeat center center fixed;
+            background-size: cover;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .door-area {
+            position: absolute;
+            left: 50%;
+            top: 20%;
+            transform: translateX(-50%);
+            width: 180px;
+            height: 280px;
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        .door-area:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .final-container {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .final-content {
+            background: white;
+            border-radius: 20px;
+            padding: 60px 40px;
+            max-width: 700px;
+            margin: 5% auto;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .trophy {
+            font-size: 5em;
+            margin-bottom: 20px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        h1 {
+            color: #667eea;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+
+        .message {
+            color: #333;
+            font-size: 1.3em;
+            line-height: 1.8;
+            margin-bottom: 30px;
+        }
+
+        .summary {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin: 30px 0;
+            text-align: left;
+        }
+
+        .summary h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        .summary ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .summary li {
+            padding: 8px 0;
+            color: #555;
+        }
+
+        .summary li:before {
+            content: "✓ ";
+            color: #667eea;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
+            margin: 10px;
+            transition: transform 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+        }
+
+        .nav-menu {
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+        }
+    </style>
+</head>
+<body>
+    <div class="door-area" onclick="openDoor()"></div>
+    
+    <div id="final-modal" class="final-container">
+        <div class="final-content">
+        <div class="trophy">🏆</div>
+        <h1>Congratulations!</h1>
+        <p class="message">
+            You've successfully completed the IAM & CTF Challenge!<br>
+            You've mastered the mysteries of authentication, authorization, and identity management.
+        </p>
+
+        <div class="summary">
+            <h3>What You've Learned:</h3>
+            <ul>
+                <li>SAML Assertions and how they transmit user information</li>
+                <li>Signature verification and certificate validation</li>
+                <li>Role-based access control and attribute manipulation</li>
+                <li>OpenID Connect and the ID Token vs Access Token</li>
+                <li>Security principles in modern authentication systems</li>
+            </ul>
+        </div>
+
+        <p class="message">
+            You are now ready to apply these concepts in real-world scenarios.<br>
+            Keep exploring, keep learning, and stay secure! 🔐
+        </p>
+
+        <div class="nav-menu">
+            <a href="CTF.html" class="btn">Return to Castle</a>
+            <a href="IAM.html" class="btn">Back to IAM Home</a>
+        </div>
+        </div>
+    </div>
+
+    <script>
+        function openDoor() {
+            document.getElementById('final-modal').style.display = 'block';
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            if (event.target == document.getElementById('final-modal')) {
+                document.getElementById('final-modal').style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>
