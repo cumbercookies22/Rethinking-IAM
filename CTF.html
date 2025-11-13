@@ -277,13 +277,18 @@
 
     <div class="content">
         <div class="castle-scene">
+            <!-- Castle Gate Link -->
+            <a id="gate-link" href="http://10.0.0.192:3000/saml" class="gate-link" target="_self" rel="noopener">
+                <div class="gate-button">Click Here</div>
+            </a>
         
             <!-- Diary -->
             <div class="diary" onclick="openDiary()">
                 <div class="diary-spine"></div>
                 <div class="diary-cover"></div>
                 <div class="diary-label">Click Diary</div>
-           
+            </div>
+        </div>
     </div>
 
     <!-- Diary Modal -->
@@ -356,6 +361,27 @@
     <div class="cloud" style="top: 200px; left: 150px; animation-duration: 32s;"></div>
 
     <script>
+        // Configure gate link to start SAML login and return to OIDC.html after auth
+        (function configureGateLink() {
+            try {
+                const idpBase = 'http://10.0.0.192:3000/saml'; // SAML IdP entry
+                const link = document.getElementById('gate-link');
+                if (!link) return;
+
+                // Build absolute return URL to OIDC.html from current location
+                const current = new URL(window.location.href);
+                const returnUrl = new URL('OIDC.html', current);
+
+                // Append RelayState parameter for post-auth redirect
+                const finalIdpUrl = new URL(idpBase);
+                finalIdpUrl.searchParams.set('RelayState', returnUrl.href);
+
+                link.href = finalIdpUrl.toString();
+            } catch (e) {
+                // Fail silently; leave existing href as-is
+            }
+        })();
+
         let diaryPage = 0;
         let riddleIndex = 0;
         const riddles = ['modal1', 'modal2', 'modal3'];
