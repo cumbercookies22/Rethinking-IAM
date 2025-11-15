@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Treasure Won — OIDC</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+      display: flex; align-items: center; justify-content: center;
+      padding: 20px;
+    }
+    .win-card {
+      background: #ffffff;
+      border-radius: 20px;
+      padding: 48px 36px;
+      max-width: 800px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+      border: 3px solid #a0522d;
+      animation: pop 0.5s ease-out;
+    }
+    @keyframes pop { from { transform: scale(0.97); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+    h1 { font-size: 2.4rem; color: #a0522d; margin-bottom: 10px; }
+    .subtitle { color: #555; margin-bottom: 24px; font-size: 1.1rem; }
+    .trophy { font-size: 4rem; margin: 10px 0 20px 0; }
+    .story { color: #333; line-height: 1.8; font-size: 1.1rem; margin-bottom: 24px; }
+    .btn {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white; border: none; border-radius: 10px; padding: 14px 26px;
+      font-size: 1rem; font-weight: 600; cursor: pointer; text-decoration: none;
+      display: inline-block; margin: 8px; transition: transform 0.2s;
+    }
+    .btn:hover { transform: translateY(-2px); }
+  </style>
+</head>
+<body>
+  <div class="win-card">
+    <div class="trophy">👑💍🏆</div>
+    <h1>Victory! The Bride is Won</h1>
+    <p class="subtitle">Your identity was proven via OpenID Connect. The gates open.</p>
+    <p class="story">
+      The guards bow as proof of identity shines from your token. The long journey through the castle ends in triumph.
+      May your signatures stay valid, your issuers be trusted, and your audiences match true.
+    </p>
+    <div>
+      <a class="btn" href="CTF.html">Return to Castle</a>
+      <a class="btn" href="IAM.html">Back to IAM Home</a>
+    </div>
+  </div>
+</body>
+</html>

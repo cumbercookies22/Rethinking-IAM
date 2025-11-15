@@ -162,7 +162,7 @@
     </style>
 </head>
 <body>
-    <div class="door-area" onclick="openDoor()"></div>
+    <div class="door-area" onclick="openDoor()" title="Open the OIDC Gate"></div>
     
     <div id="final-modal" class="final-container">
         <div class="final-content">
@@ -198,14 +198,19 @@
 
     <script>
         function openDoor() {
-            document.getElementById('final-modal').style.display = 'block';
-        }
+            // Build absolute URL for the post-login treasure page
+            const treasureUrl = new URL('treasure-oidc.html', window.location.href).href;
 
-        // Close modal when clicking outside
-        window.onclick = function(event) {
-            if (event.target == document.getElementById('final-modal')) {
-                document.getElementById('final-modal').style.display = 'none';
-            }
+            // Target OIDC login endpoint
+            const loginBase = 'http://73.180.147.235:3000/login-oidc';
+
+            // Append a commonly used redirect parameter.
+            // If your IdP expects a different name (e.g., redirect_uri/returnTo),
+            // change 'redirect' below to match your provider.
+            const loginUrl = `${loginBase}?redirect=${encodeURIComponent(treasureUrl)}`;
+
+            // Navigate to login
+            window.location.href = loginUrl;
         }
     </script>
 </body>
