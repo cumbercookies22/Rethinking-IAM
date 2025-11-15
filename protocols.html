@@ -3,28 +3,116 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Security Protocols</title>
+    <title>SAML Protocol - Princess Bride CTF</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #e0eafc 0%, #cfdef3 100%);
+            color: #222;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            background: rgba(255,255,255,0.95);
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+            padding: 40px 30px;
+        }
+        h1, h2, h3 {
+            color: #764ba2;
+        }
+        .section {
+            margin-bottom: 32px;
+        }
+        .flow-diagram {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 30px 0;
+        }
+        .flow-step {
+            background: #FFD700;
+            color: #222;
+            border-radius: 8px;
+            padding: 18px 28px;
+            margin: 0 10px;
+            font-weight: bold;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .flow-step:hover {
+            background: #FFA500;
+        }
+        .questions {
+            background: #f5e6d3;
+            border-radius: 10px;
+            padding: 24px;
+            margin-bottom: 32px;
+        }
+        .question {
+            margin-bottom: 18px;
+        }
+        .strategy {
+            background: #e8d4b8;
+            border-radius: 10px;
+            padding: 24px;
+        }
+        ul {
+            margin: 10px 0 10px 20px;
+        }
+    </style>
 </head>
 <body>
-    <header>
-        <h1>Security Protocols</h1>
-        <nav>
+    <div class="container">
+        <div style="display: flex; justify-content: center; gap: 30px; margin-bottom: 32px;">
+            <a href="protocols.html" class="protocol-btn" style="background:#764ba2;color:#fff;padding:16px 32px;border-radius:10px;font-size:1.2em;text-decoration:none;font-weight:bold;box-shadow:0 2px 8px rgba(0,0,0,0.08);transition:background 0.2s;">SAML</a>
+            <a href="protocol-oidc.html" class="protocol-btn" style="background:#FFD700;color:#222;padding:16px 32px;border-radius:10px;font-size:1.2em;text-decoration:none;font-weight:bold;box-shadow:0 2px 8px rgba(0,0,0,0.08);transition:background 0.2s;">OIDC</a>
+        </div>
+        <h1>Security Assertion Markup Language (SAML)</h1>
+        <div class="section">
+            <h2>Dissecting the Protocol</h2>
+            <p>SAML is an open standard for exchanging authentication and authorization data between parties, in particular, between an identity provider and a service provider.</p>
+        </div>
+        <div class="section">
+            <h2>Why?</h2>
+            <p>SAML enables single sign-on (SSO), allowing users to authenticate once and access multiple services securely.</p>
+        </div>
+        <div class="section">
+            <h2>Authentication Flow Diagram</h2>
+            <div class="flow-diagram">
+                <div class="flow-step" title="User tries to access the app">1. User Clicks Login</div>
+                <div class="flow-step" title="App redirects to IdP">2. Redirect to Identity Provider</div>
+                <div class="flow-step" title="IdP authenticates user">3. Authenticate at IdP</div>
+                <div class="flow-step" title="IdP sends SAML Response">4. SAML Assertion Sent</div>
+                <div class="flow-step" title="App grants access">5. Access Granted</div>
+            </div>
+            <p>Click each step for a tooltip explanation.</p>
+        </div>
+        <div class="section">
+            <h2>Understanding the XML Metadata</h2>
+            <p>SAML metadata is XML that describes the configuration of identity providers and service providers. It includes endpoints, certificates, and supported protocols.</p>
+        </div>
+        <div class="section">
+            <h2>Tools Used for This CTF</h2>
             <ul>
-                <li><a href="IAM.html">IAM</a></li>
-                <li><a href="philosophy.html">Philosophy</a></li>
-                <li><a href="protocols.html">Protocols</a></li>
-                <li><a href="CTF.html">CTF</a></li>
+                <li>Postman</li>
+                <li>SAML Tracer (browser extension)</li>
             </ul>
-        </nav>
-    </header>
-    <main>
-        <section>
-            <h2>Understanding Security Protocols</h2>
-            <p>Content about security protocols and standards goes here...</p>
-        </section>
-    </main>
-    <footer>
-        <p>&copy; 2025 IAM Research</p>
-    </footer>
+        </div>
+        <div class="section questions">
+            <h2>Answer the Following Questions to Understand SAML</h2>
+            <div class="question">1. What is the purpose of a SAML Assertion?</div>
+            <div class="question">2. How does the authentication flow work?</div>
+            <div class="question">3. What information is found in SAML metadata?</div>
+            <div class="question">4. How do you use SAML Tracer to debug authentication?</div>
+        </div>
+        <div class="section strategy">
+            <h2>Strategy: Princess Bride Theme</h2>
+            <p>The prince is going to save the bride — that’s the last step of the process! Relate your CTF steps to the Princess Bride story, and create users according to the characters.</p>
+        </div>
+    </div>
 </body>
 </html>

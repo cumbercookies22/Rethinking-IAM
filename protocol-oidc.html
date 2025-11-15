@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenID Connect - Protocol Deep Dive</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .nav-menu {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 40px;
+        }
+
+        .nav-menu ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .nav-menu a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+
+        .nav-menu a:hover {
+            color: #FFD700;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+
+        h1 {
+            color: #667eea;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        h2 {
+            color: #764ba2;
+            font-size: 1.8em;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            border-left: 4px solid #667eea;
+            padding-left: 15px;
+        }
+
+        h3 {
+            color: #667eea;
+            font-size: 1.4em;
+            margin-top: 25px;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            font-size: 1.3em;
+            font-style: italic;
+            margin-bottom: 30px;
+        }
+
+        p {
+            color: #333;
+            line-height: 1.8;
+            margin-bottom: 15px;
+        }
+
+        ul {
+            margin: 15px 0;
+            padding-left: 30px;
+        }
+
+        li {
+            color: #333;
+            line-height: 1.8;
+            margin-bottom: 10px;
+        }
+
+        .highlight-box {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .strategy-box {
+            background: linear-gradient(135deg, #fffbe6 0%, #fff4d6 100%);
+            border: 3px solid #a0522d;
+            padding: 30px;
+            margin: 30px 0;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .strategy-box h2 {
+            color: #a0522d;
+            border: none;
+            padding: 0;
+            margin-bottom: 20px;
+        }
+
+        .strategy-box p {
+            font-size: 1.2em;
+            line-height: 2;
+        }
+
+        .tools-list {
+            background: #e8f4f8;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .questions-box {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 25px 0;
+        }
+
+        .questions-box h3 {
+            color: #856404;
+            margin-top: 0;
+        }
+
+        .questions-box ol {
+            margin-top: 15px;
+        }
+
+        .questions-box li {
+            color: #856404;
+            font-weight: 500;
+        }
+
+        .emoji {
+            font-size: 1.3em;
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav-menu">
+        <ul>
+            <li><a href="IAM.html">IAM</a></li>
+            <li><a href="philosophy.html">Philosophy</a></li>
+            <li><a href="protocols.html">Protocols</a></li>
+            <li><a href="CTF.html">CTF</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <div style="display: flex; justify-content: center; gap: 30px; margin-bottom: 32px;">
+            <a href="protocols.html" class="protocol-btn" style="background:#764ba2;color:#fff;padding:16px 32px;border-radius:10px;font-size:1.2em;text-decoration:none;font-weight:bold;box-shadow:0 2px 8px rgba(0,0,0,0.08);transition:background 0.2s;">SAML</a>
+            <a href="protocol-oidc.html" class="protocol-btn" style="background:#FFD700;color:#222;padding:16px 32px;border-radius:10px;font-size:1.2em;text-decoration:none;font-weight:bold;box-shadow:0 2px 8px rgba(0,0,0,0.08);transition:background 0.2s;">OIDC</a>
+        </div>
+        <h1>OpenID Connect</h1>
+        <p class="subtitle">Peeling back the protocol</p>
+
+        <h2>Why?</h2>
+        <div class="highlight-box">
+            <p><strong>Tokens & Trust</strong> – OIDC brings identity to OAuth 2.0</p>
+            <p><strong>The discovery document</strong> – where do apps learn how to trust the IdP?</p>
+        </div>
+
+        <h2>Understanding the ID Token (JWT):</h2>
+        <p>Who am I? Who issued me? Can I be trusted?</p>
+
+        <h3>Endpoints you must know:</h3>
+        <ul>
+            <li><strong>Authorization Endpoint</strong> → The door to login</li>
+            <li><strong>Token Endpoint</strong> → Where the magic token appears</li>
+            <li><strong>UserInfo Endpoint</strong> → The identity scroll <span class="emoji">📜</span></li>
+        </ul>
+
+        <div class="tools-list">
+            <h3>Tools used in this stage:</h3>
+            <ul>
+                <li><strong>Postman</strong></li>
+                <li><strong>Browser DevTools</strong> → Network tab</li>
+                <li><strong>JWT.io</strong> → decode your identity token</li>
+            </ul>
+        </div>
+
+        <div class="questions-box">
+            <h3>Answer the following questions to understand OIDC:</h3>
+            <ol>
+                <li>Who issued this token?</li>
+                <li>Who is the audience?</li>
+                <li>When does it expire?</li>
+                <li>Who is the hero that logged in?</li>
+            </ol>
+        </div>
+
+        <div class="strategy-box">
+            <h2>STRATEGY</h2>
+            <p>The prince has rescued the bride <span class="emoji">🏰</span><br>
+            But to leave the castle gates, he must reveal who he truly is.<br>
+            His identity token proves:<br>
+            <strong><span class="emoji">👑</span> "I am the prince — let me pass!"</strong></p>
+            <p style="margin-top: 20px; font-size: 1.4em; color: #667eea;">
+                <strong>OIDC = Prove your identity after the rescue<br>
+                <span class="emoji">⚔️</span> → <span class="emoji">🪪</span> → <span class="emoji">🏆</span></strong>
+            </p>
+        </div>
+    </div>
+</body>
+</html>
